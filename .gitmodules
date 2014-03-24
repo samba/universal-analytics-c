@@ -1,0 +1,3 @@
+[submodule "src/events"]
+	path = src/events
+	url = git@github.com:samba/simple-c-events.git

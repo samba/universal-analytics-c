@@ -11,7 +11,7 @@
 #ifndef UNIVERSALANALYTICS_HEADER_GUARD
 #define UNIVERSALANALYTICS_HEADER_GUARD 1
 
-#include "http.h"
+#include "dispatcher.h"
 
 /* These definitions are primarily for planning memory allocation and loop sentinels;
  * eventually they'll be converted to enums... */
@@ -171,8 +171,8 @@ typedef struct UATracker_t {
   char query[ UA_MAX_QUERY_LEN ];
   int query_len;
   
-  /* HTTP handler (from http.h) */
-  struct HTTPQueue_t queue; 
+  /* HTTP handler (from dispatch.h) */
+  HTTPDispatcher_t dispatch; 
 
 } UATracker_t;
 

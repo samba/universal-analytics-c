@@ -1,5 +1,5 @@
 /******************************************************************************
-* Universal Analytics for C 
+* HTTP wrapper for Universal Analytics library in C
 * Copyright (c) 2013, Analytics Pros
 * 
 * This project is free software, distributed under the BSD license. 

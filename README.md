@@ -22,9 +22,41 @@ We'll be building out additional examples of all available tracking within it. C
 Due to the constraints of the C language, this library's interface that differs slightly from Google's `analytics.js` implementation. In particular, `enum` constants are used to specify parameter fields, rather than strings (i.e. by parameter name). This offers some measurable efficiencies, while remaining quite readable (in our opinion).
 
 
-# Features not implemented
+# Dispatch mechanism
 
-* Throttling
+**DRAFT**
+
+- Cap at 500 hits per session; session is app runtime (timestamp at start)
+- Replay old sessions by adjusting date
+- Session duration build-time option (#define) at 6hours default
+- Provide alternate HTTP request callback support
+
+Queueing mechanism:
+
+- Read cache at start
+- Write cache at 10 seconds, exit, and flush
+	- Truncate data at 2MB; drop older sessions
+- Push requests into queue
+- When response is 200, remove from queue
+- When response is NOT 200, signal wait to pause the queue for 5 minutes
+- Provide interface to re-start queue (before 5min retry) - event trigger callback
+- Attempt to flush the queue every 5 minutes, regardless of length
+- Consider decay method to reduce retry frequency on subsequent failures... 
+	- 5m, 5m, 10m, 20m, 30m...
+	- Not less frequently than 30 minutes
+
+
+Transparent queueing and caching; user code shouldn't have to know about it.
+
+# User libraries
+
+Provide interfaces in
+- C++ (for statefulness, access layer for other libs)
+- C#
+- Objective-C
+
+
+# Features not implemented
 
 
 # License

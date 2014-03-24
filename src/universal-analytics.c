@@ -203,7 +203,7 @@ static inline void initParameterState(UAParameter_t params[], unsigned int howma
 void cleanTracker(UATracker_t* tracker){
   assert(NULL != tracker);
   if((*tracker).__configured__ == UA_MEM_MAGIC_CONFIG){
-    HTTPcleanup(& tracker->queue); // run any queued requests...
+    teardownDispatcher(& tracker->dispatch); // this may attempt to run any queued requests
   }
   memset(tracker, 0, sizeof(UATracker_t)); 
 }
@@ -303,7 +303,7 @@ void initTracker(UATracker_t* tracker, char* trackingId, char* clientId, char* u
 
   memset(& tracker->query, 0, UA_MAX_QUERY_LEN);
 
-  HTTPsetup(& tracker->queue);
+  setupDispatcher(& tracker->dispatch);
 
   setParameterCore(tracker->map_parameters, tracker->lifetime_parameters, UA_VERSION_NUMBER, 0, UA_PROTOCOL_VERSION);
   setParameterCore(tracker->map_parameters, tracker->lifetime_parameters, UA_TRACKING_ID, 0, trackingId);
@@ -401,7 +401,12 @@ void queueTracking(UATracker_t* tracker){
   memset(query, 0, UA_MAX_QUERY_LEN);
   query_len = assembleQueryString(tracker, query, 0);
 
-  HTTPenqueue(& tracker->queue, UA_ENDPOINT, UA_USERAGENT, query, query_len); 
+  HTTPRequest_t* req = prepareRequest(REQUEST_POST);
+  setRequestProperty(req, REQUEST_BODY, query, query_len);
+  setRequestProperty(req, REQUEST_URI, UA_ENDPOINT, strlen(UA_ENDPOINT));
+  setRequestProperty(req, REQUEST_USER_AGENT, UA_USERAGENT, strlen(UA_USERAGENT));
+
+  queueRequest(& tracker->dispatch, req); 
 }
 
 /* Prepare ephemeral state on a tracker and dispatch its query */
@@ -422,7 +427,7 @@ void sendTracking(UATracker_t* tracker, trackingType_t type, UAOptions_t* opts){
   queueTracking(tracker);
   
   if(getTrackerOption(tracker, UA_OPTION_QUEUE) == 0){
-    HTTPflush(& tracker->queue);
+    flushDispatchQueue(& tracker->dispatch);
   }
   
   
