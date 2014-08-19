@@ -217,6 +217,10 @@ void setParameter(UATracker tracker, trackingField_t type, unsigned int slot_id,
  * Dispatches resulting query to Google Analytics */
 void sendTracking(UATracker state, trackingType_t type, UAOptions_t* opts);
 
+/* Processes tracker state with a tracking type and ephemeral options
+ * Immediately dispatches resulting query to Google Analytics */
+int mySendTracking(UATracker state, trackingType_t type, UAOptions_t* opts);
+
 /* Safely wipe tracker state without free() */
 void cleanTracker(UATracker);
 

@@ -430,4 +430,32 @@ void sendTracking(UATracker_t* tracker, trackingType_t type, UAOptions_t* opts){
 
 }
 
+/* Send an event immediately, without queueing, and return status syncrhonously */
+int mySendTracking(UATracker_t* tracker, trackingType_t type, UAOptions_t* opts){
+
+  int ret;
+  unsigned int query_len;
+  char* query;
+  assert(NULL != tracker);
+  assert((*tracker).__configured__ == UA_MEM_MAGIC_CONFIG);
+
+  if (NULL != opts) {
+    setParameterStateList(tracker, UA_EPHEMERAL, opts->options);
+  }
+
+  setParameterState(tracker,
+      UA_EPHEMERAL, UA_TRACKING_TYPE, 0,
+      getTrackingType(tracker, type)
+  );
+
+  query = tracker->query;
+  memset(query, 0, UA_MAX_QUERY_LEN);
+  query_len = assembleQueryString(tracker, query, 0);
+
+  ret = HTTPsend(UA_ENDPOINT, UA_USERAGENT, query, query_len);
+
+  resetQuery(tracker);
+
+  return ret;
+}
 

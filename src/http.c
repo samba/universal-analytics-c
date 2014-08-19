@@ -128,4 +128,33 @@ int HTTPenqueue(HTTPQueue_t* queue, const char* endpoint, const char* useragent,
   return queue->count;
 }
 
+int HTTPsend(const char* endpoint, const char* useragent, const char* query, unsigned int query_len) 
+{
+  int   ret;
+  CURL* curl;
+
+  assert(NULL != query);
+  assert(NULL != endpoint);
+  assert(NULL != useragent);
+
+  curl = curl_easy_init();
+
+  if (DEBUG_PRINT_CURL_QUERY) {
+    printf("Queueing: \n\t- %s\n\t- %s\n\t- %s\n", endpoint, useragent, query);
+  }
+
+  if (DEBUG_CURL_VERBOSE) {
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+  }
+
+  curl_easy_setopt(curl, CURLOPT_URL, endpoint);
+  curl_easy_setopt(curl, CURLOPT_COPYPOSTFIELDS, query);
+  curl_easy_setopt(curl, CURLOPT_USERAGENT, useragent);
+  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curl_null_data_handler);
+  curl_easy_setopt(curl, CURLOPT_WRITEDATA, curl);
+
+  ret = curl_easy_perform(curl);
+
+  return ret;
+}
 

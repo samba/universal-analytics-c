@@ -1,10 +1,7 @@
 DEBUG ?= 0
 DEBUG_FLAGS=-ggdb -D DEBUG=$(DEBUG) 
-COMPILE_FLAGS=-Wall -I../gopro-sdk-analytics/extern/curl/include
-LIB_PATH =../gopro-sdk-analytics/extern/curl/build/lib/libcurl.a
-LIB_PATH +=../gopro-sdk-analytics/gopro-sdk-contrib/zlib-1.2.8/libz.a
-LIB_PATH +=../gopro-sdk-analytics/extern/openssl/build/lib/libssl.a
-LIB_PATH +=../gopro-sdk-analytics/extern/openssl/build/lib/libcrypto.a -lrt -ldl
+COMPILE_FLAGS=-Wall -stdlib=libstdc++
+DEPEND_FLAGS=-l curl
 # OPTIMIZE_FLAGS=-O3
 
 .PHONY: all clean test
@@ -23,11 +20,11 @@ build/libanalytics.a: build/http.o build/universal-analytics.o
 
 build/testing.exe: test.c build/universal-analytics.o build/http.o 
 	mkdir -p `dirname $@`
-	gcc $(COMPILE_FLAGS) $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) -o $@ $^ $(LIB_PATH)
+	gcc $(COMPILE_FLAGS) $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) $(DEPEND_FLAGS) -o $@ $^
 
 build/static-testing.exe: test-static.c build/universal-analytics.o build/http.o 
 	mkdir -p `dirname $@`
-	gcc $(COMPILE_FLAGS) $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) -o $@ $^ $(LIB_PATH)
+	gcc $(COMPILE_FLAGS) $(OPTIMIZE_FLAGS) $(DEBUG_FLAGS) $(DEPEND_FLAGS) -o $@ $^
 
 build/http.o: src/http.c src/http.h
 	mkdir -p `dirname $@`
