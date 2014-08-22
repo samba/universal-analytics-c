@@ -1,6 +1,6 @@
 DEBUG ?= 0
 DEBUG_FLAGS=-ggdb -D DEBUG=$(DEBUG) 
-COMPILE_FLAGS=-Wall -I../gopro-sdk-analytics/extern/curl/include
+COMPILE_FLAGS=-Wall -I../curl/include
 LIB_PATH =../gopro-sdk-analytics/extern/curl/build/lib/libcurl.a
 LIB_PATH +=../gopro-sdk-analytics/gopro-sdk-contrib/zlib-1.2.8/libz.a
 LIB_PATH +=../gopro-sdk-analytics/extern/openssl/build/lib/libssl.a
