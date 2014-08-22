@@ -1,10 +1,10 @@
 DEBUG ?= 0
 DEBUG_FLAGS=-ggdb -D DEBUG=$(DEBUG) 
 COMPILE_FLAGS=-Wall -I../curl/include
-LIB_PATH =../gopro-sdk-analytics/extern/curl/build/lib/libcurl.a
-LIB_PATH +=../gopro-sdk-analytics/gopro-sdk-contrib/zlib-1.2.8/libz.a
-LIB_PATH +=../gopro-sdk-analytics/extern/openssl/build/lib/libssl.a
-LIB_PATH +=../gopro-sdk-analytics/extern/openssl/build/lib/libcrypto.a -lrt -ldl
+LIB_PATH =../curl/build/lib/libcurl.a
+LIB_PATH +=../../gopro-sdk-contrib/zlib-1.2.8/libz.a
+LIB_PATH +=../openssl/build/lib/libssl.a
+LIB_PATH +=../openssl/build/lib/libcrypto.a -lrt -ldl
 # OPTIMIZE_FLAGS=-O3
 
 .PHONY: all clean test
