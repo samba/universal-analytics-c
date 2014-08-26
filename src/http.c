@@ -35,7 +35,7 @@ size_t curl_null_data_handler(char *ptr, size_t size, size_t nmemb, void *userda
   return (nmemb * size);
 }
 
-static inline unsigned int _minimum(unsigned int a, unsigned int b){
+static unsigned int _minimum(unsigned int a, unsigned int b){
   return (b < a) ? b : a;
 }
 
