@@ -39,18 +39,25 @@ static inline unsigned int _minimum(unsigned int a, unsigned int b){
   return (b < a) ? b : a;
 }
 
+int curl_error_handler(CURLMcode result){
+  return (result != CURLM_OK);
+}
+
 
 /* Sequentially de-queue requests */
 int curl_multi_unload(CURLM* handler, CURL* requests[], unsigned int total){
   int count = _minimum(UA_MAX_QUERY_QUEUE, total);
-  int i = count;
+  int i = 0;
 
   if(DEBUG){
     printf("Processing %d requests...\n", count);
   }
 
   while(count){
-    curl_multi_perform(handler, & count);
+    i++;
+    if(curl_error_handler(curl_multi_perform(handler, & count))){
+      break; // 
+    }
   }
 
   while(i--){

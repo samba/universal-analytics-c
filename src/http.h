@@ -19,10 +19,11 @@
 
 #include <stdlib.h>
 #include <curl/curl.h>
+#include <libssl.h>
 
 #define UA_MAX_QUERY_LEN 4096
 #define UA_MAX_QUERY_QUEUE 10
-
+#define HTTP_STATUS_MESSAGE_LEN 32
 
 /* Callback types */
 typedef void* (*UAGenericCallback)(void*);
@@ -44,6 +45,23 @@ typedef struct HTTPQueue_t {
 void HTTPcleanup(HTTPQueue_t* queue);
 void HTTPsetup(HTTPQueue_t* queue);
 void HTTPflush(HTTPQueue_t* queue);
+
+typedef struct HTTPResponse_t {
+	int response_code;
+	char response_message[HTTP_STATUS_MESSAGE_LEN +1];
+} HTTPResponse_t;
+
+typedef enum HTTPMethod {
+	HTTP_GET = 0,
+	HTTP_POST = 1
+} HTTPMethod_t;
+
+typedef struct HTTPSocket_t {
+
+} HTTPSocket_t;
+
+HTTPResponse_t HTTPrequest(HTTPMethod_t method, char* request)
+
 
 
 int HTTPenqueue(HTTPQueue_t* queue, const char* endpoint, const char* useragent, const char* query, unsigned int query_len);

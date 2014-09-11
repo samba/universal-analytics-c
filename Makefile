@@ -1,6 +1,6 @@
 DEBUG ?= 0
 DEBUG_FLAGS=-ggdb -D DEBUG=$(DEBUG) 
-COMPILE_FLAGS=-Wall -stdlib=libstdc++
+COMPILE_FLAGS=-Wall -stdlib=libstdc++ -std=c89
 DEPEND_FLAGS=-l curl
 # OPTIMIZE_FLAGS=-O3
 
