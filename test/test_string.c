@@ -1,9 +1,11 @@
-
+#include "../src/string/string.h"
 #include "../src/string/encode.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#define test_encoding 1
+#define test_hexadecimal_representation 1
+#define test_concatenation 0
+#define test_encoding 0
 #define test_hexdigest 1
 
 
@@ -20,6 +22,32 @@ int print_char_codes(char* value, unsigned int length){
 
 
 int main(int argc, char* argv[]){
+
+
+
+	if(test_concatenation){
+		UAString h = string("(hebrew) [סֶאבױ].");
+		UAString q = string("Man muss oft üben wenn er echt Deutsch lernen würde. ");
+		UAString p = string("I'm testing concatenation.\n");
+
+
+		UAString result = char_concat(q->value, p->value);
+
+		printf("Concatenating two strings: \"%s\", and \"%s\"\n", q->value, p->value);
+		printf("Test: '%s'\n", result->value);
+
+
+		UAString z = concat(h, concat(q, p));
+
+		printf("Result value: \"%s\"\n", z->value);
+		printf("Result length (stored): %lu\n", z->length);
+		printf("Result length (detected): %lu\n", strlen(z->value));
+
+
+		freestr(p);
+		freestr(q);
+		freestr(z);
+	}
 
 	if(test_encoding){
 
