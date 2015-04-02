@@ -1,14 +1,23 @@
 DEBUG ?= 0
 DEBUG_FLAGS=-ggdb -D DEBUG=$(DEBUG) 
-COMPILE_FLAGS=-Wall -stdlib=libstdc++
+COMPILE_FLAGS=-Wall
 DEPEND_FLAGS=-l curl
 # OPTIMIZE_FLAGS=-O3
 
 .PHONY: all clean test archive
 
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Darwin)
+	COMPILE_FLAGS += "-stdlib=libstdc++"
+endif
+
 all: test archive
 
 test: build/testing.exe build/static-testing.exe build/strings.exe 
+	build/testing.exe
+	build/static-testing.exe
+	build/strings.exe
 
 archive: build/libanalytics.a
 
